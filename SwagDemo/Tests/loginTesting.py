@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.select import Select
 import unittest
-
+import HtmlTestRunner
 class LoginTest(unittest.TestCase):
 
     @classmethod
@@ -61,4 +61,4 @@ class LoginTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(output="C:/Users/santo/PycharmProjects/SeleniumPython/SwagDemo/HTML_reports"))
