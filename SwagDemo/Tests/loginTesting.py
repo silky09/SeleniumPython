@@ -4,8 +4,11 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.select import Select
+from SwagDemo.PageObjects.loginPage import LoginPage
 import unittest
 import HtmlTestRunner
+
+
 class LoginTest(unittest.TestCase):
 
     @classmethod
@@ -17,9 +20,13 @@ class LoginTest(unittest.TestCase):
     def test_form_valid(self):
         driver = self.driver
         driver.get("https://www.saucedemo.com/")
-        driver.find_element(By.ID, 'user-name').send_keys("standard_user")
-        driver.find_element(By.ID, 'password').send_keys("secret_sauce")
-        driver.find_element(By.ID, 'login-button').click()
+
+        login = LoginPage(driver)
+        login.enter_Username("standard_user")
+        login.enter_Password("secret_sauce")
+        login.click_Login()
+
+
         #work on filter for sorting prices
         time.sleep(2)
         Sorting_Price = Select(driver.find_element(By.XPATH, '//*[@id="header_container"]/div[2]/div[2]/span/select'))
