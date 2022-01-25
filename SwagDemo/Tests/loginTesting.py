@@ -5,6 +5,12 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.select import Select
 from SwagDemo.PageObjects.loginPage import LoginPage
+from SwagDemo.PageObjects.homePage import HomePage
+from SwagDemo.PageObjects.cart_checkoutPage import CartCheckoutPage
+from SwagDemo.PageObjects.checkout_info_Page import CheckoutInfo
+from SwagDemo.PageObjects.checkout_complete_Page import Checkout_CompletePage
+
+
 import unittest
 import HtmlTestRunner
 
@@ -26,37 +32,51 @@ class LoginTest(unittest.TestCase):
         login.enter_Password("secret_sauce")
         login.click_Login()
 
+        time.sleep(2)
+        home = HomePage(driver)
+        home.select_Sortingprice('Price (low to high)')
+        home.click_image()
+        home.click_AddToCart()
+        time.sleep(2)
+        home.click_BackToProducts()
+        home.select_Sortingprice('Price (low to high)')
 
-        #work on filter for sorting prices
         time.sleep(2)
-        Sorting_Price = Select(driver.find_element(By.XPATH, '//*[@id="header_container"]/div[2]/div[2]/span/select'))
-        Sorting_Price.select_by_visible_text('Price (low to high)')
-        #check item
-        driver.find_element(By.ID, 'item_2_img_link').click()
-        driver.find_element(By.ID, 'add-to-cart-sauce-labs-onesie').click()
-        driver.find_element(By.ID, 'back-to-products').click()
-        Sorting_Price = Select(driver.find_element(By.XPATH, '//*[@id="header_container"]/div[2]/div[2]/span/select'))
-        Sorting_Price.select_by_visible_text('Price (low to high)')
-        time.sleep(2)
+
         #adding products
-        driver.find_element(By.ID, 'add-to-cart-sauce-labs-bolt-t-shirt').click()
-        driver.find_element(By.ID, 'add-to-cart-sauce-labs-backpack').click()
-        driver.find_element(By.XPATH, '//*[@id="shopping_cart_container"]/a').click()
-        #Checkout
-        driver.find_element(By.ID, 'checkout').click()
+
+        products = HomePage(driver)
+        products.select_SauceLabsBolt_Tshirt()
+        products.select_SauceLabs_Backpack()
+        products.click_Shopping_Cart()
+
+        # Checkout
+
+        checkout = CartCheckoutPage(driver)
+        checkout.click_Checkout()
+
         #checkout info
-        driver.find_element(By.ID, 'first-name').send_keys("Hola")
-        driver.find_element(By.ID, 'last-name').send_keys("bola")
-        driver.find_element(By.ID, 'postal-code').send_keys("99999")
-        driver.find_element(By.ID, 'continue').click()
-        time.sleep(2)
+
+        checkout_info = CheckoutInfo(driver)
+        checkout_info.enter_FirstName("SAN")
+        checkout_info.enter_LastName("JAN")
+        checkout_info.enter_Postal_code("12123")
+        time.sleep(1)
+        checkout_info.click_Continue()
+
         #finish
-        driver.find_element(By.ID, 'finish').click()
+        checkout_complete = Checkout_CompletePage(driver)
+        checkout_complete.click_Finish()
+
         #back to home
-        driver.find_element(By.ID, 'back-to-products').click()
+        checkout_complete.click_BackHome()
+
         #click logout
-        driver.find_element(By.ID, 'react-burger-menu-btn').click()
-        driver.find_element(By.XPATH, '//*[@id="logout_sidebar_link"]').click()
+        logout = HomePage(driver)
+        logout.click_Burger_menu()
+        time.sleep(2)
+        logout.click_Logout()
+
 
 
     @classmethod
